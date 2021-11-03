@@ -15,3 +15,6 @@ buildNumber.properties
 .project
 .classpath
 /bin/
+
+#Images
+*.png
