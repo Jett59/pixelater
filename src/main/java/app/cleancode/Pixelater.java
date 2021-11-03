@@ -1,8 +1,9 @@
 package app.cleancode;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Desktop;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.file.Files;
@@ -15,13 +16,13 @@ public class Pixelater {
         String input = Files.readString(Paths.get("config.pxl"));
         List<DrawingInstruction> instructions = new FileParser().parse(input);
         BufferedImage image = null;
-        Graphics graphics = null;
+        Graphics2D graphics = null;
         for (DrawingInstruction instruction : instructions) {
             switch (instruction.instruction) {
                 case CREATE: {
                     image = new BufferedImage(instruction.operands.get(0).intValue(),
                             instruction.operands.get(1).intValue(), BufferedImage.TYPE_4BYTE_ABGR);
-                    graphics = image.getGraphics();
+                    graphics = (Graphics2D) image.getGraphics();
                     break;
                 }
                 case COLOR: {
@@ -37,6 +38,7 @@ public class Pixelater {
                     break;
                 }
                 case LINE: {
+                    graphics.setStroke(new BasicStroke(instruction.operands.get(4).floatValue()));
                     graphics.drawLine(instruction.operands.get(0).intValue(),
                             instruction.operands.get(1).intValue(),
                             instruction.operands.get(2).intValue(),
